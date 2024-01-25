@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 )
+
 func ErrorHandler(str string) {
 	flags := log.LstdFlags | log.Lshortfile
 

@@ -1,21 +1,21 @@
 package request
 
 import (
-	"funding/exchanges/types"
-	"funding/exchanges/errW"
-	"sync"
 	"fmt"
-	"net/http"
-	"io"
+	"funding/exchanges/errW"
+	"funding/exchanges/types"
 	"funding/internal/model"
+	"io"
+	"net/http"
+	"sync"
 )
 
 func GetFunding() (*model.FinalData, error) {
 	urls := getUrls()
-	
+
 	mainSlice := make([]types.FundingItem, 0, len(urls))
 	suitableCoinsSlice := make([]types.SuitableCoin, 0, 30)
-	var result model.FinalData 
+	var result model.FinalData
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -34,7 +34,7 @@ func GetFunding() (*model.FinalData, error) {
 					mu.Lock()
 					mainSlice = append(mainSlice, *mainSliceElem)
 					mu.Unlock()
-				}  
+				}
 			}
 		}(u)
 	}
@@ -51,6 +51,7 @@ func doReq(url *string) (content *[]byte, urlReq string) {
 	if err != nil {
 		errStr := fmt.Sprintf("Error requesting data from %s: %s\n", *url, err.Error())
 		errW.ErrorHandler(errStr)
+		fmt.Println(err)
 
 		return nil, *url
 	}
@@ -60,7 +61,8 @@ func doReq(url *string) (content *[]byte, urlReq string) {
 	if err != nil {
 		errStr := fmt.Sprintf("Error reading body from %s: %s\n", *url, err.Error())
 		errW.ErrorHandler(errStr)
-
+		fmt.Println(err)
+		
 		return nil, *url
 	}
 
