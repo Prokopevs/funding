@@ -1,0 +1,4 @@
+ERROR:	2024/01/24 23:04:01 errorHandler.go:13: Error requesting data from https://api.byb.com/derivatives/v3/public/tickers: Get "https://api.byb.com/derivatives/v3/public/tickers": dial tcp: lookup api.byb.com on 127.0.0.53:53: no such host
+
+ERROR:	2024/01/24 23:04:24 errorHandler.go:13: Error requesting data from https://api.bitg.com/api/v2/mix/market/tickers?productType=USDT-FUTURES: Get "https://api.bitg.com/api/v2/mix/market/tickers?productType=USDT-FUTURES": dial tcp 69.64.147.243:443: i/o timeout
+
