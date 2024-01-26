@@ -161,7 +161,7 @@ func fillMainSlice(content *[]byte, urlReq string) (*types.FundingItem, error) {
 			formatSymbol := strings.ReplaceAll(b.Contract, "_", "")
 
 			newItem := types.SuitableCoin{
-				Exchange:        "GateIo",
+				Exchange:        "Gateio",
 				Symbol:          formatSymbol,
 				BidPrice:        b.Highest_bid,
 				AskPrice:        b.Lowest_ask,
@@ -171,7 +171,140 @@ func fillMainSlice(content *[]byte, urlReq string) (*types.FundingItem, error) {
 			localSlice = append(localSlice, newItem)
 		}
 
-		obj := &types.FundingItem{Exchange: "GateIo", FundingArr: localSlice}
+		obj := &types.FundingItem{Exchange: "Gateio", FundingArr: localSlice}
+
+		return obj, nil
+	}
+
+	if strings.Contains(urlReq, "bitmart") {
+		var response types.BitmartResponse
+		err := json.Unmarshal([]byte(*content), &response)
+		if err != nil {
+			errStr := fmt.Sprintf("Error Unmarshal data %s\n", err.Error())
+			errW.ErrorHandler(errStr)
+			fmt.Println(err)
+			return nil, err
+		}
+
+		localSlice := make([]types.SuitableCoin, 0, len(response.Data.Symbols))
+
+		for _, b := range response.Data.Symbols {
+			fundingRate := convertToFloat(b.Expected_funding_rate) * 100
+			formatFundingRate := convertToFloat(fmt.Sprintf("%.4f", fundingRate))
+
+			newItem := types.SuitableCoin{
+				Exchange:        "Bitmart",
+				Symbol:          b.Symbol,
+				BidPrice:        b.Last_price,
+				AskPrice:        b.Last_price,
+				FundingRate:     formatFundingRate,
+				NextFundingTime: "",
+			}
+			localSlice = append(localSlice, newItem)
+		}
+
+		obj := &types.FundingItem{Exchange: "Bitmart", FundingArr: localSlice}
+
+		return obj, nil
+	}
+
+	if strings.Contains(urlReq, "bingx") {
+		var response types.BingxResponse
+		err := json.Unmarshal([]byte(*content), &response)
+		if err != nil {
+			errStr := fmt.Sprintf("Error Unmarshal data %s\n", err.Error())
+			errW.ErrorHandler(errStr)
+			fmt.Println(err)
+			return nil, err
+		}
+
+		localSlice := make([]types.SuitableCoin, 0, len(response.Data))
+
+		for _, b := range response.Data {
+			fundingRate := convertToFloat(b.LastFundingRate) * 100
+			formatFundingRate := convertToFloat(fmt.Sprintf("%.4f", fundingRate))
+
+			formatSymbol := strings.ReplaceAll(b.Symbol, "-", "")
+
+			newItem := types.SuitableCoin{
+				Exchange:        "Bingx",
+				Symbol:          formatSymbol,
+				BidPrice:        b.IndexPrice,
+				AskPrice:        b.IndexPrice,
+				FundingRate:     formatFundingRate,
+				NextFundingTime: "",
+			}
+			localSlice = append(localSlice, newItem)
+		}
+
+		obj := &types.FundingItem{Exchange: "Bingx", FundingArr: localSlice}
+
+		return obj, nil
+	}
+
+	if strings.Contains(urlReq, "kucoin") {
+		var response types.KucoinResponse
+		err := json.Unmarshal([]byte(*content), &response)
+		if err != nil {
+			errStr := fmt.Sprintf("Error Unmarshal data %s\n", err.Error())
+			errW.ErrorHandler(errStr)
+			fmt.Println(err)
+			return nil, err
+		}
+
+		localSlice := make([]types.SuitableCoin, 0, len(response.Data))
+
+		for _, b := range response.Data {
+			fundingRate := b.FundingFeeRate * 100
+			formatFundingRate := convertToFloat(fmt.Sprintf("%.4f", fundingRate))
+
+			formatSymbol := b.Symbol[:len(b.Symbol)-1]
+
+			newItem := types.SuitableCoin{
+				Exchange:        "Kucoin",
+				Symbol:          formatSymbol,
+				BidPrice:        strconv.FormatFloat(b.IndexPrice, 'f', -1, 64),
+				AskPrice:        strconv.FormatFloat(b.IndexPrice, 'f', -1, 64),
+				FundingRate:     formatFundingRate,
+				NextFundingTime: "",
+			}
+			localSlice = append(localSlice, newItem)
+		}
+
+		obj := &types.FundingItem{Exchange: "Kucoin", FundingArr: localSlice}
+
+		return obj, nil
+	}
+
+	if strings.Contains(urlReq, "coinex") {
+		var response types.CoinexResponse
+		err := json.Unmarshal([]byte(*content), &response)
+		if err != nil {
+			errStr := fmt.Sprintf("Error Unmarshal data %s\n", err.Error())
+			errW.ErrorHandler(errStr)
+			fmt.Println(err)
+			return nil, err
+		}
+
+		localSlice := make([]types.SuitableCoin, 0, len(response.Data.Ticker))
+
+		for k, b := range response.Data.Ticker {
+			fundingRate := convertToFloat(b.Funding_rate_next) * 100
+			formatFundingRate := convertToFloat(fmt.Sprintf("%.4f", fundingRate))
+
+
+			newItem := types.SuitableCoin{
+				Exchange:        "Coinex",
+				Symbol:          k,
+				BidPrice:        b.Buy,
+				AskPrice:        b.Sell,
+				FundingRate:     formatFundingRate,
+				NextFundingTime: "",
+			}
+			localSlice = append(localSlice, newItem)
+		}
+
+		obj := &types.FundingItem{Exchange: "Coinex", FundingArr: localSlice}
 
 		return obj, nil
 	}
