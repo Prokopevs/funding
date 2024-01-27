@@ -1,0 +1,107 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample funding server.",
+        "title": "Funding API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/funding": {
+            "get": {
+                "description": "get all funding",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "funding"
+                ],
+                "summary": "Get funding list",
+                "operationId": "get-funding",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.FinalData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "err": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.FinalData": {
+            "type": "object",
+            "properties": {
+                "negative": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.FundingCoin"
+                    }
+                },
+                "positive": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.FundingCoin"
+                    }
+                }
+            }
+        },
+        "types.FundingCoin": {
+            "type": "object",
+            "properties": {
+                "elems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.SuitableCoin"
+                    }
+                },
+                "symbol": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.SuitableCoin": {
+            "type": "object",
+            "properties": {
+                "askPrice": {
+                    "type": "string"
+                },
+                "bidPrice": {
+                    "type": "string"
+                },
+                "exchange": {
+                    "type": "string"
+                },
+                "fundingRate": {
+                    "type": "number"
+                },
+                "nextFundingTime": {
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

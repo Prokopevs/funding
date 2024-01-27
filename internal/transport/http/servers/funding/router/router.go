@@ -5,6 +5,9 @@ import (
 	"funding/internal/transport/http/servers/funding/handler"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	"github.com/swaggo/files" // swagger embed files
+	_ "funding/docs"
 )
 
 var r *gin.Engine
@@ -25,6 +28,8 @@ func InitRouter(postHandler *handler.Handler) {
 	}))
 
 	r.GET("/funding", postHandler.GetData)
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
 func Start(addr string) error {

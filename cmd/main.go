@@ -1,8 +1,6 @@
 package main
 
 import (
-	// "encoding/json"
-	// "fmt"
 	"funding/exchanges"
 	"funding/internal/repository/funding"
 	"funding/internal/services/funding"
@@ -10,6 +8,13 @@ import (
 	"funding/internal/transport/http/servers/funding/router"
 )
 
+
+//  @title Funding API
+//  @version 1.0
+//	@description This is a sample funding server.
+
+// @host localhost:8080
+// @BasePath /
 func main () {
 	data := exchanges.NewFundingData()
 
@@ -20,9 +25,4 @@ func main () {
 	router.InitRouter(fundingHandler)
 
 	router.Start("0.0.0.0:8080")
-
-	// result, _ :=  fundingSvc.GetData()
-	// c, _ := json.Marshal(result)
-    // fmt.Println(string(c))
-
 }

@@ -309,6 +309,41 @@ func fillMainSlice(content *[]byte, urlReq string) (*types.FundingItem, error) {
 		return obj, nil
 	}
 
+	if strings.Contains(urlReq, "hbdm") {
+		var response types.HtxResponse
+		err := json.Unmarshal([]byte(*content), &response)
+		if err != nil {
+			errStr := fmt.Sprintf("Error Unmarshal data %s\n", err.Error())
+			errW.ErrorHandler(errStr)
+			fmt.Println(err)
+			return nil, err
+		}
+
+		localSlice := make([]types.SuitableCoin, 0, len(response.Data))
+
+		for _, b := range response.Data {
+			if rate, ok := b.Funding_rate.(string); ok {
+				fundingRate := convertToFloat(rate) * 100
+				formatFundingRate := convertToFloat(fmt.Sprintf("%.4f", fundingRate))
+
+				formatSymbol := b.Symbol+b.Fee_asset
+
+				newItem := types.SuitableCoin{
+					Exchange:        "Htx",
+					Symbol:          formatSymbol,
+					BidPrice:        "0",
+					AskPrice:        "0",
+					FundingRate:     formatFundingRate,
+					NextFundingTime: "",
+				}
+				localSlice = append(localSlice, newItem)
+			}
+		}
+
+		obj := &types.FundingItem{Exchange: "Htx", FundingArr: localSlice}
+		return obj, nil
+	}
+
 	return nil, errors.New("fail to find exchange")
 }
 

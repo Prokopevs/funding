@@ -1,0 +1,70 @@
+basePath: /
+definitions:
+  model.ErrorResponse:
+    properties:
+      err:
+        type: string
+    type: object
+  model.FinalData:
+    properties:
+      negative:
+        items:
+          $ref: '#/definitions/types.FundingCoin'
+        type: array
+      positive:
+        items:
+          $ref: '#/definitions/types.FundingCoin'
+        type: array
+    type: object
+  types.FundingCoin:
+    properties:
+      elems:
+        items:
+          $ref: '#/definitions/types.SuitableCoin'
+        type: array
+      symbol:
+        type: string
+    type: object
+  types.SuitableCoin:
+    properties:
+      askPrice:
+        type: string
+      bidPrice:
+        type: string
+      exchange:
+        type: string
+      fundingRate:
+        type: number
+      nextFundingTime:
+        type: string
+      symbol:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample funding server.
+  title: Funding API
+  version: "1.0"
+paths:
+  /funding:
+    get:
+      consumes:
+      - application/json
+      description: get all funding
+      operationId: get-funding
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.FinalData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Get funding list
+      tags:
+      - funding
+swagger: "2.0"

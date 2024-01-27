@@ -89,3 +89,12 @@ type CoinexResponse struct {
 		Ticker map[string]CoinexItem `json:"ticker"`
 	} `json:"data"`
 }
+
+type HtxItem struct {
+	Symbol       string `json:"symbol"`
+	Fee_asset    string `json:"fee_asset"`
+	Funding_rate interface{} `json:"funding_rate"`
+}
+type HtxResponse struct {
+	Data []HtxItem `json:"data"`
+}

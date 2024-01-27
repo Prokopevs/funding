@@ -11,6 +11,7 @@ func getUrls() []string {
 		"https://open-api.bingx.com/openApi/swap/v2/quote/premiumIndex",
 		"https://api-futures.kucoin.com/api/v1/contracts/active",
 		"https://api-cloud.bitmart.com/contract/public/details",
+		"https://api.hbdm.com/linear-swap-api/v1/swap_batch_funding_rate",
 	}
 
 	return urls
