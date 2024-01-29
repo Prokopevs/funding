@@ -1,2 +1,0 @@
-ERROR:	2024/01/26 22:14:30 errorHandler.go:14: Error requesting data from https://open-api.bingx.com/openApi/swap/v2/quote/premiumIndex: Get "https://open-api.bingx.com/openApi/swap/v2/quote/premiumIndex": dial tcp 188.114.98.224:443: i/o timeout
-

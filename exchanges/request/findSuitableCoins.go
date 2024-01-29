@@ -6,7 +6,7 @@ import (
 )
 
 func findSuitableCoins(mainSlice *[]types.FundingItem, suitableCoinsSlice []types.SuitableCoin) (SliceRes []types.SuitableCoin) {
-	const fundingPercent float64 = 0.2
+	const fundingPercent float64 = 0.15
 	for _, exchange := range *mainSlice {
 		for _, fundingElem := range exchange.FundingArr {
 			fundingRate := fundingElem.FundingRate
